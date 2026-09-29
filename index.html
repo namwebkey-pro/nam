@@ -2,145 +2,114 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Tạo Key</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tạo Key - Demo</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
   body {
     background: #0a0e14;
-    font-family: 'Segoe UI', sans-serif;
     color: #cdd6e0;
-    padding: 30px;
+    padding: 20px;
+    min-height: 100vh;
   }
 
-  .tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
+  /* Tabs */
+  .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
   .tab {
-    flex: 1;
-    padding: 14px;
-    text-align: center;
-    border-radius: 8px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    cursor: pointer;
-    font-size: 14px;
+    flex: 1; padding: 14px; text-align: center;
+    border-radius: 8px; font-weight: 600; letter-spacing: 1px;
+    cursor: pointer; font-size: 13px; transition: 0.2s;
   }
   .tab.active {
     background: linear-gradient(90deg, #3a0d18, #1a0a10);
-    color: #ff2d55;
-    border: 1px solid #ff2d55;
+    color: #ff2d55; border: 1px solid #ff2d55;
+    box-shadow: 0 0 15px rgba(255,45,85,0.3);
   }
   .tab.inactive {
-    background: #10151d;
-    color: #5a6472;
-    border: 1px solid #1e2632;
+    background: #10151d; color: #5a6472; border: 1px solid #1e2632;
   }
 
+  /* Card */
   .card {
-    background: #0d1219;
-    border: 1px solid #1c2632;
-    border-radius: 12px;
-    padding: 24px;
+    background: #0d1219; border: 1px solid #1c2632;
+    border-radius: 12px; padding: 22px;
   }
-
-  .card-title {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 24px;
-  }
+  .card-title { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
   .hex {
-    width: 38px; height: 38px;
-    border: 1px solid #ff2d55;
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    color: #ff2d55;
-    font-size: 18px;
+    width: 38px; height: 38px; border: 1px solid #ff2d55;
+    border-radius: 8px; display: flex; align-items: center;
+    justify-content: center; color: #ff2d55; font-size: 18px;
   }
-  .card-title h2 {
-    color: #fff;
-    font-size: 16px;
-    letter-spacing: 1px;
-  }
-  .card-title small {
-    color: #4a5563;
-    font-size: 11px;
-    letter-spacing: 1px;
-  }
+  .card-title h2 { color: #fff; font-size: 15px; letter-spacing: 1px; }
+  .card-title small { color: #4a5563; font-size: 10px; letter-spacing: 1px; }
 
   .label {
-    font-size: 11px;
-    color: #6b7684;
-    letter-spacing: 1px;
-    margin: 18px 0 8px;
-    text-transform: uppercase;
+    font-size: 11px; color: #6b7684; letter-spacing: 1px;
+    margin: 18px 0 8px; text-transform: uppercase;
   }
-
-  .row {
-    display: flex;
-    gap: 12px;
-  }
+  .row { display: flex; gap: 10px; }
   .option {
-    flex: 1;
-    padding: 16px;
-    text-align: center;
-    border-radius: 8px;
-    background: #0a0f16;
-    border: 1px solid #1c2632;
-    color: #cdd6e0;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
+    flex: 1; padding: 15px; text-align: center;
+    border-radius: 8px; background: #0a0f16;
+    border: 1px solid #1c2632; color: #cdd6e0;
+    font-weight: 600; font-size: 13px; cursor: pointer;
     transition: 0.2s;
   }
   .option.selected {
-    border: 1px solid #ff2d55;
-    color: #fff;
-    box-shadow: 0 0 12px rgba(255,45,85,0.3);
+    border: 1px solid #ff2d55; color: #fff;
+    box-shadow: 0 0 12px rgba(255,45,85,0.4);
   }
-
   select {
-    width: 100%;
-    padding: 16px;
-    background: #0a0f16;
-    border: 1px solid #1c2632;
-    border-radius: 8px;
-    color: #cdd6e0;
-    font-size: 14px;
-    outline: none;
+    width: 100%; padding: 15px; background: #0a0f16;
+    border: 1px solid #1c2632; border-radius: 8px;
+    color: #cdd6e0; font-size: 13px; outline: none;
     appearance: none;
     background-image: url("data:image/svg+xml;utf8,<svg fill='%236b7684' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
+    background-repeat: no-repeat; background-position: right 12px center;
   }
-
-  .hint {
-    font-size: 11px;
-    color: #4a5563;
-    margin-top: 8px;
-  }
+  .hint { font-size: 10px; color: #4a5563; margin-top: 8px; letter-spacing: 0.5px; }
 
   .btn-create {
-    width: 100%;
-    margin-top: 28px;
-    padding: 18px;
-    background: transparent;
-    border: 1px solid #ff2d55;
-    border-radius: 8px;
-    color: #ff2d55;
-    font-weight: 700;
-    letter-spacing: 2px;
-    font-size: 14px;
-    cursor: pointer;
+    width: 100%; margin-top: 26px; padding: 17px;
+    background: transparent; border: 1px solid #ff2d55;
+    border-radius: 8px; color: #ff2d55; font-weight: 700;
+    letter-spacing: 2px; font-size: 13px; cursor: pointer;
     transition: 0.25s;
   }
   .btn-create:hover {
-    background: #ff2d55;
-    color: #fff;
-    box-shadow: 0 0 20px rgba(255,45,85,0.6);
+    background: #ff2d55; color: #fff;
+    box-shadow: 0 0 25px rgba(255,45,85,0.6);
   }
+  .btn-create:active { transform: scale(0.98); }
+
+  /* Kết quả */
+  .result {
+    margin-top: 20px; padding: 18px;
+    background: #0a0f16; border: 1px dashed #2a3543;
+    border-radius: 10px; display: none;
+  }
+  .result.show { display: block; animation: fadeIn 0.4s; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  .result h3 {
+    color: #ff2d55; font-size: 12px; letter-spacing: 1.5px;
+    margin-bottom: 12px; text-transform: uppercase;
+  }
+  .key-item {
+    display: flex; justify-content: space-between; align-items: center;
+    background: #10151d; padding: 12px 14px; border-radius: 6px;
+    margin-bottom: 8px; font-family: 'Consolas', monospace;
+    font-size: 13px; color: #4ade80;
+    border: 1px solid #1c2632;
+  }
+  .key-item:last-child { margin-bottom: 0; }
+  .copy-btn {
+    background: transparent; border: 1px solid #2a3543;
+    color: #6b7684; padding: 5px 10px; border-radius: 5px;
+    font-size: 10px; cursor: pointer; letter-spacing: 1px;
+    transition: 0.2s;
+  }
+  .copy-btn:hover { border-color: #ff2d55; color: #ff2d55; }
+  .copy-btn.copied { border-color: #4ade80; color: #4ade80; }
 </style>
 </head>
 <body>
@@ -161,50 +130,106 @@
       </div>
     </div>
 
-    <!-- Chọn sản phẩm -->
     <div class="label">Chọn sản phẩm</div>
     <div class="row">
-      <div class="option selected">◆ PROXY IPA</div>
-      <div class="option">◆ PROXY VPN</div>
+      <div class="option selected" data-type="IPA">◆ PROXY IPA</div>
+      <div class="option" data-type="VPN">◆ PROXY VPN</div>
     </div>
     <div class="hint">KEY CHỈ ĐƯỢC RANDOM TRONG SẢN PHẨM ĐÃ CHỌN</div>
 
-    <!-- Loại key -->
     <div class="label">Loại key</div>
-    <select>
-      <option>KEY NGÀY</option>
-      <option>KEY TUẦN</option>
-      <option>KEY THÁNG</option>
+    <select id="loaiKey">
+      <option value="NGAY">KEY NGÀY</option>
+      <option value="TUAN">KEY TUẦN</option>
+      <option value="THANG">KEY THÁNG</option>
     </select>
     <div class="hint">CHỌN ĐÚNG LOẠI KEY - HỆ THỐNG CHỈ RANDOM TRONG LOẠI ĐÃ CHỌN</div>
 
-    <!-- Số lượng -->
     <div class="label">Số lượng key / lần</div>
-    <select>
-      <option>1 KEY</option>
-      <option>5 KEY</option>
-      <option>10 KEY</option>
+    <select id="soLuong">
+      <option value="1">1 KEY</option>
+      <option value="2">2 KEY</option>
+      <option value="3">3 KEY</option>
+      <option value="5">5 KEY</option>
+      <option value="10">10 KEY</option>
     </select>
     <div class="hint">KHÔNG GIỚI HẠN SỐ LẦN TẠO TRONG NGÀY - HỖ TRỢ 1-10 KEY</div>
 
-    <!-- Nút tạo -->
-    <button class="btn-create">⚙ TẠO KEY NGAY</button>
+    <button class="btn-create" id="btnTao">⚙ TẠO KEY NGAY</button>
+
+    <!-- Kết quả -->
+    <div class="result" id="result">
+      <h3>✦ KEY ĐÃ TẠO</h3>
+      <div id="keyList"></div>
+    </div>
   </div>
 
-  <script>
-    // Đổi chọn sản phẩm
-    document.querySelectorAll('.option').forEach(el => {
-      el.onclick = () => {
-        document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
-        el.classList.add('selected');
-      };
-    });
+<script>
+  let sanPham = 'IPA';
 
-    // Nút tạo key
-    document.querySelector('.btn-create').onclick = () => {
-      alert('Đã tạo key thành công! (demo)');
+  // Chọn sản phẩm
+  document.querySelectorAll('.option').forEach(el => {
+    el.onclick = () => {
+      document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      sanPham = el.dataset.type;
     };
-  </script>
+  });
 
+  // Tạo key random
+  function taoKeyRandom(prefix) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let part = '';
+    for (let i = 0; i < 12; i++) {
+      part += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    // Chia thành 3 nhóm cho đẹp: XXXX-XXXX-XXXX
+    const formatted = part.match(/.{1,4}/g).join('-');
+    return `${prefix}-${formatted}`;
+  }
+
+  // Nút tạo
+  document.getElementById('btnTao').onclick = () => {
+    const loai = document.getElementById('loaiKey').value;
+    const soLuong = parseInt(document.getElementById('soLuong').value);
+
+    // Prefix theo loại key
+    const prefixMap = {
+      'NGAY': 'DAY',
+      'TUAN': 'WEEK',
+      'THANG': 'MONTH'
+    };
+
+    const prefix = `${sanPham}-${prefixMap[loai]}`;
+
+    const listEl = document.getElementById('keyList');
+    listEl.innerHTML = '';
+
+    for (let i = 0; i < soLuong; i++) {
+      const key = taoKeyRandom(prefix);
+      const div = document.createElement('div');
+      div.className = 'key-item';
+      div.innerHTML = `
+        <span>${key}</span>
+        <button class="copy-btn" onclick="copyKey(this, '${key}')">COPY</button>
+      `;
+      listEl.appendChild(div);
+    }
+
+    document.getElementById('result').classList.add('show');
+  };
+
+  // Copy key
+  function copyKey(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'ĐÃ COPY';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'COPY';
+        btn.classList.remove('copied');
+      }, 1500);
+    });
+  }
+</script>
 </body>
 </html>
