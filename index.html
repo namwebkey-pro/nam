@@ -3,15 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tạo Key - Demo</title>
+<title>Tạo Key - Học HTML</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-  body {
-    background: #0a0e14;
-    color: #cdd6e0;
-    padding: 20px;
-    min-height: 100vh;
-  }
+  body { background: #0a0e14; color: #cdd6e0; padding: 20px; min-height: 100vh; }
 
   /* Tabs */
   .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
@@ -19,6 +14,7 @@
     flex: 1; padding: 14px; text-align: center;
     border-radius: 8px; font-weight: 600; letter-spacing: 1px;
     cursor: pointer; font-size: 13px; transition: 0.2s;
+    user-select: none;
   }
   .tab.active {
     background: linear-gradient(90deg, #3a0d18, #1a0a10);
@@ -53,7 +49,7 @@
     border-radius: 8px; background: #0a0f16;
     border: 1px solid #1c2632; color: #cdd6e0;
     font-weight: 600; font-size: 13px; cursor: pointer;
-    transition: 0.2s;
+    transition: 0.2s; user-select: none;
   }
   .option.selected {
     border: 1px solid #ff2d55; color: #fff;
@@ -110,18 +106,29 @@
   }
   .copy-btn:hover { border-color: #ff2d55; color: #ff2d55; }
   .copy-btn.copied { border-color: #4ade80; color: #4ade80; }
+
+  /* Lịch sử */
+  .history-item {
+    background: #10151d; padding: 12px 14px; border-radius: 6px;
+    margin-bottom: 8px; border: 1px solid #1c2632; font-size: 12px;
+    line-height: 1.7;
+  }
+  .history-item b { color: #4ade80; font-family: Consolas, monospace; }
+  .status-active { color: #4ade80; font-weight: 600; }
+  .status-expired { color: #ff2d55; font-weight: 600; }
+  .empty { color: #4a5563; text-align: center; padding: 20px; font-size: 13px; }
 </style>
 </head>
 <body>
 
   <!-- Tabs -->
   <div class="tabs">
-    <div class="tab active">⚙ TẠO KEY</div>
-    <div class="tab inactive">📄 LỊCH SỬ</div>
+    <div class="tab active" id="tabCreate">⚙ TẠO KEY</div>
+    <div class="tab inactive" id="tabHistory">📄 LỊCH SỬ</div>
   </div>
 
-  <!-- Card -->
-  <div class="card">
+  <!-- Tab Tạo Key -->
+  <div class="card" id="viewCreate">
     <div class="card-title">
       <div class="hex">⬡</div>
       <div>
@@ -148,8 +155,6 @@
     <div class="label">Số lượng key / lần</div>
     <select id="soLuong">
       <option value="1">1 KEY</option>
-      <option value="2">2 KEY</option>
-      <option value="3">3 KEY</option>
       <option value="5">5 KEY</option>
       <option value="10">10 KEY</option>
     </select>
@@ -157,17 +162,29 @@
 
     <button class="btn-create" id="btnTao">⚙ TẠO KEY NGAY</button>
 
-    <!-- Kết quả -->
     <div class="result" id="result">
       <h3>✦ KEY ĐÃ TẠO</h3>
       <div id="keyList"></div>
     </div>
   </div>
 
+  <!-- Tab Lịch sử -->
+  <div class="card" id="viewHistory" style="display:none">
+    <div class="card-title">
+      <div class="hex">📄</div>
+      <div>
+        <h2>LỊCH SỬ</h2>
+        <small>// KEY ĐÃ TẠO TRƯỚC ĐÓ</small>
+      </div>
+    </div>
+    <div id="historyList"></div>
+  </div>
+
 <script>
+  // ===== BIẾN TOÀN CỤC =====
   let sanPham = 'IPA';
 
-  // Chọn sản phẩm
+  // ===== CHỌN SẢN PHẨM =====
   document.querySelectorAll('.option').forEach(el => {
     el.onclick = () => {
       document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
@@ -176,37 +193,76 @@
     };
   });
 
-  // Tạo key random
+  // ===== CHUYỂN TAB =====
+  document.getElementById('tabCreate').onclick = () => {
+    document.getElementById('tabCreate').className = 'tab active';
+    document.getElementById('tabHistory').className = 'tab inactive';
+    document.getElementById('viewCreate').style.display = 'block';
+    document.getElementById('viewHistory').style.display = 'none';
+  };
+
+  document.getElementById('tabHistory').onclick = () => {
+    document.getElementById('tabCreate').className = 'tab inactive';
+    document.getElementById('tabHistory').className = 'tab active';
+    document.getElementById('viewCreate').style.display = 'none';
+    document.getElementById('viewHistory').style.display = 'block';
+    loadHistory();
+  };
+
+  // ===== HÀM TẠO KEY RANDOM =====
   function taoKeyRandom(prefix) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let part = '';
     for (let i = 0; i < 12; i++) {
       part += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    // Chia thành 3 nhóm cho đẹp: XXXX-XXXX-XXXX
     const formatted = part.match(/.{1,4}/g).join('-');
     return `${prefix}-${formatted}`;
   }
 
-  // Nút tạo
+  // ===== TÍNH NGÀY HẾT HẠN =====
+  function tinhHetHan(type) {
+    const now = new Date();
+    const map = { NGAY: 1, TUAN: 7, THANG: 30 };
+    now.setDate(now.getDate() + (map[type] || 1));
+    return now.toISOString();
+  }
+
+  // ===== LẤY / LƯU LỊCH SỬ VÀO LOCALSTORAGE =====
+  function getHistory() {
+    return JSON.parse(localStorage.getItem('myKeys') || '[]');
+  }
+  function saveHistory(arr) {
+    localStorage.setItem('myKeys', JSON.stringify(arr));
+  }
+
+  // ===== NÚT TẠO KEY =====
   document.getElementById('btnTao').onclick = () => {
     const loai = document.getElementById('loaiKey').value;
     const soLuong = parseInt(document.getElementById('soLuong').value);
 
-    // Prefix theo loại key
-    const prefixMap = {
-      'NGAY': 'DAY',
-      'TUAN': 'WEEK',
-      'THANG': 'MONTH'
-    };
-
+    const prefixMap = { NGAY: 'DAY', TUAN: 'WEEK', THANG: 'MONTH' };
     const prefix = `${sanPham}-${prefixMap[loai]}`;
 
     const listEl = document.getElementById('keyList');
     listEl.innerHTML = '';
 
+    const history = getHistory();
+    const newKeys = [];
+
     for (let i = 0; i < soLuong; i++) {
       const key = taoKeyRandom(prefix);
+      const expired = tinhHetHan(loai);
+      const record = {
+        key: key,
+        product: sanPham,
+        type: loai,
+        created_at: new Date().toISOString(),
+        expired_at: expired
+      };
+      history.unshift(record);
+      newKeys.push(key);
+
       const div = document.createElement('div');
       div.className = 'key-item';
       div.innerHTML = `
@@ -216,10 +272,11 @@
       listEl.appendChild(div);
     }
 
+    saveHistory(history);
     document.getElementById('result').classList.add('show');
   };
 
-  // Copy key
+  // ===== COPY KEY =====
   function copyKey(btn, text) {
     navigator.clipboard.writeText(text).then(() => {
       btn.textContent = 'ĐÃ COPY';
@@ -228,7 +285,43 @@
         btn.textContent = 'COPY';
         btn.classList.remove('copied');
       }, 1500);
+    }).catch(() => {
+      // Fallback cho trình duyệt cũ
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      btn.textContent = 'ĐÃ COPY';
+      setTimeout(() => btn.textContent = 'COPY', 1500);
     });
+  }
+
+  // ===== HIỂN THỊ LỊCH SỬ =====
+  function loadHistory() {
+    const history = getHistory();
+    const el = document.getElementById('historyList');
+
+    if (!history.length) {
+      el.innerHTML = '<div class="empty">Chưa có key nào được tạo.</div>';
+      return;
+    }
+
+    el.innerHTML = history.map(k => {
+      const expired = new Date(k.expired_at) < new Date();
+      const cls = expired ? 'status-expired' : 'status-active';
+      const status = expired ? 'HẾT HẠN' : 'CÒN HẠN';
+      return `
+        <div class="history-item">
+          <b>${k.key}</b><br>
+          Sản phẩm: ${k.product} | Loại: ${k.type}<br>
+          Tạo: ${new Date(k.created_at).toLocaleString('vi-VN')}<br>
+          Hết hạn: ${new Date(k.expired_at).toLocaleString('vi-VN')}<br>
+          Trạng thái: <span class="${cls}">${status}</span>
+        </div>
+      `;
+    }).join('');
   }
 </script>
 </body>
